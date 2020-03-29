@@ -163,11 +163,16 @@ class Tools():
                     _LOGGING.info('Device: %s %s', device.address.human,
                                   device.description)
                 else:
+                    #statestring = ' '.join(['%s=%s'.format(s.name,s.value) for s in device.states])
                     _LOGGING.info('Device: %s cat: 0x%02x subcat: 0x%02x '
                                   'desc: %s, model: %s',
                                   device.address.human, device.cat,
                                   device.subcat, device.description,
                                   device.model)
+                    print('  stateList:',device.states)
+                    for s in device.states:
+                        print('   state:',device.states[s].name,device.states[s].value)
+                        #_LOGGING.info('    state: %s'.format(s))
         else:
             _LOGGING.info('No devices found')
             if not self.plm.transport:
@@ -327,29 +332,29 @@ class Tools():
             pass
         return device
 
-    def kpl_status(self, address, group):
+    def kpl_status(self, address, stateid):
         """Get the status of a KPL button."""
         addr = Address(address)
         device = self.plm.devices[addr.id]
-        device.states[group].async_refresh_state()
+        device.states[stateid].async_refresh_state()
 
-    def kpl_on(self, address, group):
+    def kpl_on(self, address, stateid):
         """Get the status of a KPL button."""
         addr = Address(address)
         device = self.plm.devices[addr.id]
-        device.states[group].on()
+        device.states[stateid].on()
 
-    def kpl_off(self, address, group):
+    def kpl_off(self, address, stateid):
         """Get the status of a KPL button."""
         addr = Address(address)
         device = self.plm.devices[addr.id]
-        device.states[group].off()
+        device.states[stateid].off()
 
-    def kpl_set_on_mask(self, address, group, mask):
+    def kpl_set_on_mask(self, address, stateid, mask):
         """Get the status of a KPL button."""
         addr = Address(address)
         device = self.plm.devices[addr.id]
-        device.states[group].set_on_mask(mask)
+        device.states[stateid].set_on_mask(mask)
 
 
 # pylint: disable=too-many-public-methods
